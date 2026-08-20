@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leandro Toledano — Senior Backend Engineer</title>
+<meta name="description" content="Leandro Toledano — Senior Backend Engineer. Java, Quarkus, Kafka, sistemas de banca digital event-driven.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1417;
+    --surface:#161D22;
+    --surface-2:#1B2329;
+    --border:#2A343A;
+    --border-soft:#232C31;
+    --text:#E8E6DE;
+    --text-dim:#9AA3A7;
+    --text-faint:#5F6A6E;
+    --brass:#C79A56;
+    --brass-dim:#8A6B3C;
+    --teal:#4FA8A0;
+    --teal-dim:#356B66;
+    --max:1000px;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      linear-gradient(var(--border-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: center top;
+    background-attachment: fixed;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--brass); outline-offset:3px;}
+
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 28px;}
+
+  /* NAV */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter: blur(10px);
+    background:rgba(15,20,23,0.82);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:var(--max); margin:0 auto;
+  }
+  .nav-id{
+    font-family:var(--font-mono); font-size:13px; color:var(--text-dim);
+    display:flex; align-items:center; gap:8px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--teal); box-shadow:0 0 8px var(--teal);}
+  .nav-links{display:flex; gap:28px; font-family:var(--font-mono); font-size:13px; color:var(--text-dim);}
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--brass);}
+  @media (max-width:640px){ .nav-links{gap:16px;} .nav-links span.lbl{display:none;} }
+
+  /* HERO */
+  .hero{padding:88px 0 48px;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:0.12em;
+    color:var(--teal); text-transform:uppercase; margin-bottom:22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:20px; height:1px; background:var(--teal);}
+  h1{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(34px, 5.4vw, 58px);
+    line-height:1.08; letter-spacing:-0.01em;
+    max-width:820px; color:var(--text);
+  }
+  h1 .accent{color:var(--brass);}
+  .sub{
+    margin-top:24px; max-width:600px; color:var(--text-dim);
+    font-size:16.5px; line-height:1.7;
+  }
+  .cta-row{display:flex; flex-wrap:wrap; gap:12px; margin-top:34px;}
+  .btn{
+    font-family:var(--font-mono); font-size:13px; padding:11px 18px;
+    border:1px solid var(--border); border-radius:3px; color:var(--text);
+    transition:all .2s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn:hover{border-color:var(--brass); color:var(--brass);}
+  .btn.primary{background:var(--brass); border-color:var(--brass); color:#0F1417; font-weight:600;}
+  .btn.primary:hover{background:#D8AC68; color:#0F1417;}
+
+  /* PIPELINE DIAGRAM */
+  .pipeline-wrap{margin-top:64px; border:1px solid var(--border-soft); border-radius:6px; background:var(--surface); padding:22px 22px 16px;}
+  .pipeline-label{font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.1em; margin-bottom:10px;}
+  .pipeline-svg{width:100%; height:auto; display:block;}
+  .pnode-box{fill:var(--surface-2); stroke:var(--border);}
+  .pnode-text{font-family:var(--font-mono); font-size:11px; fill:var(--text);}
+  .pnode-sub{font-family:var(--font-mono); font-size:9px; fill:var(--text-faint);}
+  .ppath{fill:none; stroke:var(--border); stroke-width:1.5;}
+  .ppulse{fill:var(--teal); filter:drop-shadow(0 0 4px var(--teal));}
+  @media (prefers-reduced-motion: reduce){ .ppulse{ animation:none !important; } }
+
+  /* STATUS BOARD */
+  .board{padding:40px 0 70px;}
+  .board-grid{
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:1px;
+    background:var(--border-soft); border:1px solid var(--border-soft); border-radius:6px; overflow:hidden;
+  }
+  @media (max-width:900px){ .board-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:560px){ .board-grid{grid-template-columns:repeat(2,1fr);} }
+  .stat-card{background:var(--surface); padding:22px 18px;}
+  .stat-num{font-family:var(--font-display); font-size:30px; font-weight:600; color:var(--brass);}
+  .stat-label{font-family:var(--font-mono); font-size:11px; color:var(--text-dim); margin-top:8px; line-height:1.5;}
+
+  /* SECTION HEADERS */
+  .section{padding:64px 0;}
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:38px;}
+  .section-num{font-family:var(--font-mono); font-size:12px; color:var(--teal);}
+  .section-title{font-family:var(--font-display); font-size:26px; font-weight:600;}
+  .section-line{flex:1; height:1px; background:var(--border-soft);}
+  hr.div{border:none; border-top:1px solid var(--border-soft); margin:0;}
+
+  /* EXPERIENCE */
+  .role{
+    display:grid; grid-template-columns:200px 1fr; gap:28px;
+    padding:26px 0; border-bottom:1px solid var(--border-soft);
+  }
+  .role:last-child{border-bottom:none;}
+  @media (max-width:700px){ .role{grid-template-columns:1fr;} }
+  .role-meta{font-family:var(--font-mono); font-size:12px; color:var(--text-faint);}
+  .role-dates{color:var(--teal); margin-bottom:6px;}
+  .role-dur-bar{height:5px; background:var(--surface-2); border-radius:3px; margin-top:12px; overflow:hidden; max-width:160px;}
+  .role-dur-fill{height:100%; background:var(--brass-dim); border-radius:3px;}
+  .role-title{font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--text);}
+  .role-company{color:var(--text-dim); font-size:14.5px; margin-top:2px;}
+  .role-bullets{margin-top:14px; padding-left:18px; color:var(--text-dim); font-size:14.5px;}
+  .role-bullets li{margin-bottom:8px;}
+  .role-bullets li::marker{color:var(--brass-dim);}
+
+  /* STACK BREADTH */
+  .stackchart{display:flex; flex-direction:column; gap:16px;}
+  .stackrow-head{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim); margin-bottom:6px;}
+  .stackrow-head .n{color:var(--teal);}
+  .bar-track{height:10px; background:var(--surface-2); border-radius:3px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg, var(--teal-dim), var(--teal)); border-radius:3px;}
+  .tagrow{display:flex; flex-wrap:wrap; gap:7px; margin-top:10px;}
+  .tag{font-family:var(--font-mono); font-size:11.5px; color:var(--text-dim); border:1px solid var(--border); padding:4px 9px; border-radius:3px;}
+
+  /* FOOTER / CONTACT */
+  footer{padding:70px 0 50px; border-top:1px solid var(--border-soft); margin-top:20px;}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:40px;}
+  @media (max-width:700px){ .foot-grid{grid-template-columns:1fr;} }
+  .foot-title{font-family:var(--font-display); font-size:24px; font-weight:600; margin-bottom:14px;}
+  .foot-text{color:var(--text-dim); font-size:15px; max-width:420px;}
+  .foot-links{display:flex; flex-direction:column; gap:12px; font-family:var(--font-mono); font-size:13.5px;}
+  .foot-links a{display:flex; align-items:center; gap:10px; color:var(--text-dim); transition:color .2s;}
+  .foot-links a:hover{color:var(--brass);}
+  .foot-links .arrow{color:var(--brass); opacity:0; transition:opacity .2s;}
+  .foot-links a:hover .arrow{opacity:1;}
+  .edu{margin-top:34px; padding-top:28px; border-top:1px solid var(--border-soft); font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .copyright{margin-top:40px; font-family:var(--font-mono); font-size:11px; color:var(--text-faint); text-align:center;}
+
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-id"><span class="dot"></span> leandro.toledano <span style="color:var(--text-faint)">/ backend</span></div>
+    <nav class="nav-links">
+      <a href="#experience"><span class="lbl">01_</span>experience</a>
+      <a href="#stack"><span class="lbl">02_</span>stack</a>
+      <a href="#contact"><span class="lbl">03_</span>contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">Santo Domingo, DO · GMT-4 · Open to remote</div>
+    <h1>Backend rails for banking systems that <span class="accent">aren't allowed to go down.</span></h1>
+    <p class="sub">Senior Backend Engineer building reactive, event-driven microservices for digital banking — payment tokenization, change-data-capture pipelines, and secure integrations, in Java and Quarkus.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="mailto:theleand3000@gmail.com">Email me →</a>
+      <a class="btn" href="https://www.linkedin.com/in/leandro-toledano-4abb041bb" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/Leand3k" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <div class="pipeline-wrap reveal">
+      <div class="pipeline-label">// production pipeline — CDC feed, Banco Popular Dominicano</div>
+      <svg class="pipeline-svg" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama del pipeline: PostgreSQL a Debezium, a Kafka, a Quarkus con Mutiny, a Oracle desnormalizado, a Dashboards">
+        <path class="ppath" d="M100,70 H180" />
+        <path class="ppath" d="M280,70 H360" />
+        <path class="ppath" d="M460,70 H540" />
+        <path class="ppath" d="M640,70 H720" />
+
+        <g>
+          <rect class="pnode-box" x="10" y="42" width="90" height="56" rx="4"/>
+          <text class="pnode-text" x="55" y="66" text-anchor="middle">OLTP DB</text>
+          <text class="pnode-sub" x="55" y="82" text-anchor="middle">Postgres/Oracle</text>
+        </g>
+        <g>
+          <rect class="pnode-box" x="180" y="42" width="100" height="56" rx="4"/>
+          <text class="pnode-text" x="230" y="66" text-anchor="middle">Debezium</text>
+          <text class="pnode-sub" x="230" y="82" text-anchor="middle">CDC capture</text>
+        </g>
+        <g>
+          <rect class="pnode-box" x="360" y="42" width="100" height="56" rx="4"/>
+          <text class="pnode-text" x="410" y="66" text-anchor="middle">Kafka</text>
+          <text class="pnode-sub" x="410" y="82" text-anchor="middle">event stream</text>
+        </g>
+        <g>
+          <rect class="pnode-box" x="540" y="42" width="100" height="56" rx="4"/>
+          <text class="pnode-text" x="590" y="60" text-anchor="middle">Quarkus</text>
+          <text class="pnode-sub" x="590" y="74" text-anchor="middle">Mutiny</text>
+          <text class="pnode-sub" x="590" y="87" text-anchor="middle">reactive</text>
+        </g>
+        <g>
+          <rect class="pnode-box" x="720" y="42" width="170" height="56" rx="4"/>
+          <text class="pnode-text" x="805" y="60" text-anchor="middle">Oracle</text>
+          <text class="pnode-sub" x="805" y="74" text-anchor="middle">denormalized store</text>
+          <text class="pnode-sub" x="805" y="87" text-anchor="middle">11M+ records · dashboards</text>
+        </g>
+
+        <circle class="ppulse" r="3.5">
+          <animateMotion dur="4.5s" repeatCount="indefinite"
+            path="M100,70 H180 M180,70 H280 M280,70 H360 M360,70 H460 M460,70 H540 M540,70 H640 M640,70 H720 M720,70 H890" />
+        </circle>
+      </svg>
+    </div>
+  </section>
+
+  <section class="board reveal">
+    <div class="board-grid">
+      <div class="stat-card">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">YEARS<br>production microservices</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">57</div>
+        <div class="stat-label">MICROSERVICES<br>touched, current role</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">11M+</div>
+        <div class="stat-label">RECORDS<br>streamed through CDC</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">PAYMENT NETWORKS<br>Apple Pay · PayPal · Click to Pay</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">0.15%</div>
+        <div class="stat-label">ACH COMPLIANCE FILE<br>automated end-to-end</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="div">
+
+  <section class="section" id="experience">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="reveal">
+      <div class="role">
+        <div class="role-meta">
+          <div class="role-dates">JUN 2024 — PRESENT</div>
+          Santo Domingo, DO
+          <div class="role-dur-bar"><div class="role-dur-fill" style="width:48%"></div></div>
+        </div>
+        <div>
+          <div class="role-title">Senior Software Engineer</div>
+          <div class="role-company">Banco Popular Dominicano</div>
+          <ul class="role-bullets">
+            <li>Built a digital debit card lifecycle microservice from scratch (Java, Quarkus, OpenShift) — creation, provisioning, state management.</li>
+            <li>Delivered Apple Pay, PayPal, and Click to Pay integrations: tokenization flows, provisioning callbacks, network compliance.</li>
+            <li>Built the Click to Pay enrollment pipeline on Thales D1 with JWE-encrypted PAN handling (ECDH-ES, RFC 7516) over RSA-authenticated SFTP.</li>
+            <li>Designed a Debezium/Kafka CDC pipeline on reactive Quarkus/Mutiny feeding a denormalized Oracle store for near real-time dashboards.</li>
+            <li>Migrated blocking I/O to Hibernate Reactive + Mutiny with Semaphore-based concurrency, validated with JMH benchmarks.</li>
+            <li>Led the interbank payments ecosystem on Apache Camel and the Java 21 / Jakarta / IBM MQ–AS400 modernization.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="role-meta">
+          <div class="role-dates">SEP 2022 — JUN 2024</div>
+          Santo Domingo, DO
+          <div class="role-dur-bar"><div class="role-dur-fill" style="width:39%"></div></div>
+        </div>
+        <div>
+          <div class="role-title">Software Developer</div>
+          <div class="role-company">Grupo Ramos</div>
+          <ul class="role-bullets">
+            <li>Led backend migration of the core backoffice system from a legacy PHP monolith to Node.js/Express.js with Sequelize.</li>
+            <li>Maintained a retail personalization engine (Evergage) powering data-driven product recommendations.</li>
+            <li>Paired with React.js frontend engineers to ship full-stack features end-to-end across web and mobile.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="role-meta">
+          <div class="role-dates">FEB 2022 — JUN 2022</div>
+          Santo Domingo, DO
+          <div class="role-dur-bar"><div class="role-dur-fill" style="width:9%"></div></div>
+        </div>
+        <div>
+          <div class="role-title">Junior Software Engineer</div>
+          <div class="role-company">Progressa Corporate Group</div>
+          <ul class="role-bullets">
+            <li>Built GCP-backed Python services for electronic invoicing via DGII e-CF, integrating government and enterprise REST APIs.</li>
+            <li>Developed custom Odoo modules to automate business processes across departments.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="div">
+
+  <section class="section" id="stack">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Stack breadth</h2>
+      <div class="section-line"></div>
+    </div>
+    <p class="sub" style="margin-bottom:36px;">34 technologies in active use, grouped by category — width shows tools per category.</p>
+
+    <div class="stackchart reveal">
+      <div>
+        <div class="stackrow-head"><span>Payments, Security &amp; Architecture</span><span class="n">8</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        <div class="tagrow">
+          <span class="tag">Payment Tokenization</span><span class="tag">Thales D1 / JWE</span><span class="tag">RSA Auth Manager</span><span class="tag">BeyondTrust PAM</span><span class="tag">mTLS</span><span class="tag">Microservices</span><span class="tag">REST API Design</span><span class="tag">Event-Driven Architecture</span>
+        </div>
+      </div>
+      <div>
+        <div class="stackrow-head"><span>Frameworks &amp; Reactive</span><span class="n">6</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+        <div class="tagrow">
+          <span class="tag">Quarkus</span><span class="tag">Spring Boot</span><span class="tag">Node.js/Express.js</span><span class="tag">Hibernate Reactive</span><span class="tag">Mutiny</span><span class="tag">JMH</span>
+        </div>
+      </div>
+      <div>
+        <div class="stackrow-head"><span>Cloud &amp; DevOps</span><span class="n">6</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+        <div class="tagrow">
+          <span class="tag">GCP</span><span class="tag">OpenShift</span><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">CI/CD</span><span class="tag">Git</span>
+        </div>
+      </div>
+      <div>
+        <div class="stackrow-head"><span>Messaging &amp; Integration</span><span class="n">5</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:62%"></div></div>
+        <div class="tagrow">
+          <span class="tag">Apache Kafka</span><span class="tag">Debezium (CDC)</span><span class="tag">IBM MQ</span><span class="tag">Apache Camel</span><span class="tag">JMS</span>
+        </div>
+      </div>
+      <div>
+        <div class="stackrow-head"><span>Databases</span><span class="n">5</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:62%"></div></div>
+        <div class="tagrow">
+          <span class="tag">PostgreSQL</span><span class="tag">Oracle</span><span class="tag">SQL Server</span><span class="tag">MongoDB</span><span class="tag">MariaDB</span>
+        </div>
+      </div>
+      <div>
+        <div class="stackrow-head"><span>Languages</span><span class="n">4</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+        <div class="tagrow">
+          <span class="tag">Java</span><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">SQL</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-title">Let's talk backend.</div>
+        <p class="foot-text">Open to remote Senior Backend Engineer roles on distributed, event-driven systems teams. Based in Santo Domingo (GMT-4).</p>
+      </div>
+      <div class="foot-links">
+        <a href="mailto:theleand3000@gmail.com">theleand3000@gmail.com <span class="arrow">→</span></a>
+        <a href="https://www.linkedin.com/in/leandro-toledano-4abb041bb" target="_blank" rel="noopener">linkedin.com/in/leandro-toledano <span class="arrow">→</span></a>
+        <a href="https://github.com/Leand3k" target="_blank" rel="noopener">github.com/Leand3k <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="edu">
+      <span>B.S. Software Engineering — INTEC, 2018–2022 (GPA 3.6/4.0)</span>
+      <span>Cert: Developing Applications with Google Cloud — Google</span>
+    </div>
+    <div class="copyright">© 2026 Leandro Toledano — built with plain HTML/CSS, no framework needed.</div>
+  </footer>
+
+</main>
+
+<script>
+  // Reveal-on-scroll, respects prefers-reduced-motion via CSS above.
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
