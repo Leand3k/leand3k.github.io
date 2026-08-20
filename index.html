@@ -1,1276 +1,672 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Leandro Toledano — Senior Backend Engineer</title>
-    <meta
-      name="description"
-      content="Leandro Toledano — Senior Backend Engineer. Java, Quarkus, Kafka, digital banking systems."
-    />
-    <style>
-      :root {
-        /* Modern blue palette */
-        --bg: #0d1117;
-        --card-bg: #161b22;
-        --accent-primary: #58a6ff;
-        --accent-blue: #0969da;
-        --accent-cyan: #2f81f7;
-        --accent-purple: #bb4bcd;
-        --text-main: #e1e3e8;
-        --text-muted: #8b949e;
-        --border: #30363d;
-        --font-display: system-ui, -apple-system, "Inter", sans-serif;
-        --font-mono: "JetBrains Mono", "Fira Code", monospace;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        background: var(--bg);
-        color: var(--text-main);
-        font-family: var(--font-display);
-        line-height: 1.6;
-        overflow-x: hidden;
-        /* Mejor padding para responsive */
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
-      }
-
-      /* Animated gradient background */
-      /* Animated grid overlay */
-      body {
-        background: var(--bg);
-      }
-
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 0 20px;
-        position: relative;
-        z-index: 1;
-        /* Mejora responsive - padding más generoso en desktop */
-        padding-left: clamp(16px, 3vw, 40px);
-        padding-right: clamp(16px, 3vw, 40px);
-      }
-
-      /* NAV */
-      header.nav {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: rgba(13, 17, 23, 0.95);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--border);
-      }
-
-      .nav-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 0;
-      }
-
-      .nav-logo {
-        font-family: var(--font-mono);
-        font-size: 13px;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .nav-logo .dot {
-        width: 6px;
-        height: 6px;
-        background: var(--accent-primary);
-        border-radius: 50%;
-        animation: pulse 2s ease-in-out infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 0.3;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1.2);
-        }
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 6px;
-      }
-
-      .nav-links a {
-        font-family: var(--font-mono);
-        font-size: 11px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-        position: relative;
-      }
-
-      .nav-links a::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: var(--accent-primary);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .nav-links a:hover {
-        color: var(--bg);
-      }
-
-      .nav-links a:hover::before {
-        opacity: 1;
-      }
-
-      /* HERO */
-      .hero {
-        padding: 100px 0 70px;
-        text-align: center;
-      }
-
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-family: var(--font-mono);
-        font-size: 12px;
-        color: var(--accent-primary);
-        background: rgba(88, 166, 255, 0.1);
-        padding: 6px 12px;
-        border-radius: 20px;
-        margin-bottom: 24px;
-        border: 1px solid rgba(88, 166, 255, 0.2);
-      }
-
-      .hero h1 {
-        font-size: clamp(36px, 6vw, 60px);
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        margin-bottom: 20px;
-        background: linear-gradient(135deg, #e1e3e8 0%, #b0b3c0 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .hero h1 em {
-        background: linear-gradient(
-          135deg,
-          var(--accent-primary) 0%,
-          var(--accent-cyan) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .hero p {
-        font-size: clamp(15px, 2.2vw, 18px);
-        color: var(--text-muted);
-        max-width: 640px;
-        margin: 0 auto 32px;
-        line-height: 1.7;
-      }
-
-      .hero-actions {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-family: var(--font-mono);
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 12px 20px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        /* Mejora touch targets - min 44px */
-        min-height: 44px;
-      }
-
-      .btn-primary {
-        background: var(--accent-primary);
-        color: white;
-        border: 1px solid var(--accent-primary);
-        box-shadow: 0 4px 20px rgba(88, 166, 255, 0.3);
-      }
-
-      .btn-primary:hover {
-        background: #7ac8ff;
-        border-color: #7ac8ff;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(88, 166, 255, 0.4);
-      }
-
-      .btn-secondary {
-        background: transparent;
-        color: var(--text-main);
-        border: 1px solid var(--border);
-      }
-
-      .btn-secondary:hover {
-        border-color: var(--accent-primary);
-        background: rgba(88, 166, 255, 0.08);
-        transform: translateY(-2px);
-      }
-
-      /* SECTIONS */
-      .section {
-        padding: 60px 0;
-      }
-
-      .section-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 32px;
-      }
-
-      .section-num {
-        font-family: var(--font-mono);
-        font-size: 12px;
-        color: var(--accent-primary);
-        background: rgba(88, 166, 255, 0.1);
-        padding: 6px 10px;
-        border-radius: 6px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-
-      .section-title {
-        font-size: clamp(24px, 4vw, 32px);
-        font-weight: 700;
-        letter-spacing: -0.02em;
-      }
-
-      .section-desc {
-        color: var(--text-muted);
-        font-size: 15px;
-        max-width: 540px;
-        margin-top: 10px;
-      }
-
-      /* STATS */
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-        margin-bottom: 28px;
-      }
-
-      @media (max-width: 640px) {
-        .stats-grid {
-          grid-template-columns: 1fr;
-          gap: 12px;
-        }
-      }
-
-      .stat-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-      }
-
-      .stat-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: var(--accent-primary);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.5s ease;
-      }
-
-      .stat-card:hover::before {
-        transform: scaleX(1);
-      }
-
-      .stat-card:hover {
-        border-color: var(--accent-primary);
-        transform: translateY(-4px);
-        box-shadow: 0 20px 40px rgba(88, 166, 255, 0.15);
-      }
-
-      .stat-value {
-        font-family: var(--font-mono);
-        font-size: 32px;
-        font-weight: 800;
-        color: var(--accent-primary);
-        line-height: 1;
-        margin-bottom: 6px;
-      }
-
-      .stat-label {
-        color: var(--text-muted);
-        font-size: 13px;
-        letter-spacing: 0.05em;
-      }
-
-      /* EXPERIENCE - ELIMINADA LA LÍNEA VERTICAL */
-      .experience-list {
-        position: relative;
-        padding-left: 0;
-      }
-
-      /* Timeline line eliminada - ahora sin línea vertical */
-      .timeline-line {
-        display: none; /* Eliminado */
-      }
-
-      .experience-item {
-        display: flex;
-        gap: 24px;
-        margin-left: 0;
-        padding: 28px 0;
-        opacity: 0;
-        transform: translateY(25px);
-        animation: fadeInUp 0.6s ease forwards;
-        /* Mejor layout sin línea */
-        align-items: flex-start;
-      }
-
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .experience-item:nth-child(1) {
-        animation-delay: 0.1s;
-      }
-      .experience-item:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .experience-item:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-
-      @media (max-width: 768px) {
-        .experience-item {
-          flex-direction: column;
-          gap: 12px;
-          align-items: flex-start;
-        }
-
-        .timeline-dot {
-          margin-top: 0;
-        }
-      }
-
-      .timeline-dot {
-        width: 14px;
-        height: 14px;
-        background: var(--accent-primary);
-        border-radius: 50%;
-        flex-shrink: 0;
-        margin-top: 20px;
-        box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
-        position: relative;
-      }
-
-      .timeline-dot::after {
-        content: "";
-        position: absolute;
-        inset: -3px;
-        border-radius: 50%;
-        border: 2px solid var(--accent-primary);
-        animation: spin 3s linear infinite;
-      }
-
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .experience-content {
-        flex: 1;
-      }
-
-      .experience-role {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 4px;
-      }
-
-      @media (max-width: 640px) {
-        .experience-role {
-          font-size: 18px;
-        }
-      }
-
-      .experience-company {
-        color: var(--accent-primary);
-        font-family: var(--font-mono);
-        font-size: 12px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-        padding: 4px 8px;
-        background: rgba(88, 166, 255, 0.08);
-        border-radius: 6px;
-        display: inline-block;
-      }
-
-      @media (max-width: 640px) {
-        .experience-company {
-          font-size: 11px;
-          padding: 3px 6px;
-          margin-bottom: 8px;
-        }
-      }
-
-      .experience-date {
-        font-family: var(--font-mono);
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 12px;
-        padding: 4px 8px;
-        background: rgba(9, 105, 218, 0.1);
-        border-radius: 6px;
-        display: inline-block;
-      }
-
-      @media (max-width: 640px) {
-        .experience-date {
-          font-size: 11px;
-          margin-bottom: 10px;
-        }
-      }
-
-      .experience-desc {
-        color: var(--text-muted);
-        line-height: 1.8;
-        font-size: 14px;
-      }
-
-      @media (max-width: 640px) {
-        .experience-desc {
-          font-size: 13px;
-        }
-      }
-
-      /* PROJECTS */
-      .projects-grid {
-        display: grid;
-        gap: 24px;
-      }
-
-      @media (max-width: 640px) {
-        .projects-grid {
-          gap: 20px;
-        }
-      }
-
-      .project-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        cursor: pointer;
-      }
-
-      @media (max-width: 640px) {
-        .project-card {
-          padding: 20px;
-          border-radius: 12px;
-        }
-      }
-
-      .project-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        background: linear-gradient(
-          180deg,
-          rgba(88, 166, 255, 0.1),
-          transparent
-        );
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .project-card:hover::before {
-        opacity: 1;
-      }
-
-      .project-card:hover {
-        border-color: var(--accent-primary);
-        transform: translateY(-6px);
-        box-shadow: 0 20px 50px rgba(88, 166, 255, 0.15);
-      }
-
-      .project-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--text-main);
-        background: rgba(48, 54, 61, 0.6);
-        padding: 6px 12px;
-        border-radius: 16px;
-        margin-bottom: 12px;
-      }
-
-      .project-title {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 10px;
-        background: linear-gradient(135deg, #e1e3e8 0%, #b0b3c0 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      @media (max-width: 640px) {
-        .project-title {
-          font-size: 18px;
-        }
-      }
-
-      .project-desc {
-        color: var(--text-muted);
-        line-height: 1.8;
-        margin-bottom: 16px;
-        font-size: 14px;
-      }
-
-      @media (max-width: 640px) {
-        .project-desc {
-          font-size: 13px;
-        }
-      }
-
-      .project-flow {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-family: var(--font-mono);
-        font-size: 11px;
-        color: var(--text-muted);
-        flex-wrap: wrap;
-      }
-
-      .flow-step {
-        padding: 5px 12px;
-        background: rgba(48, 54, 61, 0.5);
-        border-radius: 16px;
-      }
-
-      /* STACK */
-      .stack-section {
-        background: linear-gradient(180deg, var(--bg) 0%, var(--card-bg) 100%);
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-
-      .stack-grid {
-        display: grid;
-        gap: 20px;
-      }
-
-      @media (max-width: 640px) {
-        .stack-grid {
-          gap: 16px;
-        }
-      }
-
-      .stack-category {
-        background: rgba(88, 166, 255, 0.04);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 20px;
-        transition: all 0.3s ease;
-      }
-
-      .stack-category:hover {
-        border-color: var(--accent-primary);
-        background: rgba(88, 166, 255, 0.08);
-        transform: translateY(-4px);
-      }
-
-      .stack-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      @media (max-width: 640px) {
-        .stack-header {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-      }
-
-      .stack-title {
-        font-size: 16px;
-        font-weight: 600;
-      }
-
-      @media (max-width: 640px) {
-        .stack-title {
-          font-size: 15px;
-        }
-      }
-
-      .tech-badge {
-        display: inline-flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      @media (max-width: 640px) {
-        .tech-badge {
-          gap: 6px;
-        }
-      }
-
-      .tech-item {
-        font-family: var(--font-mono);
-        font-size: 11px;
-        padding: 6px 10px;
-        background: rgba(48, 54, 61, 0.6);
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        letter-spacing: 0.02em;
-      }
-
-      .tech-item:hover {
-        background: var(--accent-primary);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
-      }
-
-      /* FOOTER */
-      footer {
-        padding: 60px 0 40px;
-        text-align: center;
-      }
-
-      .footer-title {
-        font-size: clamp(24px, 5vw, 32px);
-        font-weight: 700;
-        margin-bottom: 14px;
-        background: linear-gradient(
-          135deg,
-          var(--text-main),
-          var(--accent-primary)
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .footer-desc {
-        color: var(--text-muted);
-        font-size: 15px;
-        max-width: 480px;
-        margin: 0 auto 28px;
-      }
-
-      @media (max-width: 640px) {
-        .footer-desc {
-          font-size: 14px;
-        }
-      }
-
-      .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 50px;
-      }
-
-      .footer-link {
-        font-family: var(--font-mono);
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        transition: all 0.3s ease;
-        padding: 10px 16px;
-        border-radius: 8px;
-        background: rgba(88, 166, 255, 0.04);
-        border: 1px solid var(--border);
-      }
-
-      .footer-link:hover {
-        color: var(--text-main);
-        border-color: var(--accent-primary);
-        background: rgba(88, 166, 255, 0.1);
-      }
-
-      .seal {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 130px;
-        height: 130px;
-        border-radius: 50%;
-        border: 3px solid var(--accent-primary);
-        padding: 22px 14px;
-        position: relative;
-        transform: rotate(-8deg);
-        background: linear-gradient(
-          135deg,
-          rgba(88, 166, 255, 0.1),
-          transparent
-        );
-        box-shadow: 0 8px 30px rgba(88, 166, 255, 0.15);
-        margin-bottom: 36px;
-      }
-
-      @media (max-width: 640px) {
-        .seal {
-          width: 120px;
-          height: 120px;
-          padding: 20px 12px;
-          margin-bottom: 32px;
-        }
-      }
-
-      .seal::before {
-        content: "";
-        position: absolute;
-        inset: -4px;
-        border-radius: 50%;
-        border: 2px dashed var(--accent-primary);
-        animation: rotateSeal 20s linear infinite;
-      }
-
-      @keyframes rotateSeal {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .seal-text {
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--accent-primary);
-        text-align: center;
-        line-height: 1.5;
-        max-width: 100%;
-      }
-
-      @media (max-width: 640px) {
-        .seal-text {
-          font-size: 9px;
-        }
-      }
-
-      .copyright {
-        font-family: var(--font-mono);
-        font-size: 11px;
-        color: var(--text-muted);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-
-      /* Scrollbar oculto para evitar línea vertical visible */
-      ::-webkit-scrollbar {
-        display: none;
-        width: 0;
-      }
-
-      html {
-        overflow-y: scroll; /* Mantiene el comportamiento de scroll nativo sin scrollbar */
-      }
-
-      /* Mejoras adicionales para responsive */
-      @media (max-width: 480px) {
-        .hero {
-          padding: 60px 0 50px;
-        }
-
-        .section {
-          padding: 40px 0;
-        }
-
-        .stat-card,
-        .project-card,
-        .stack-category {
-          padding: 20px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="nav">
-      <div class="container nav-inner">
-        <div class="nav-logo">
-          <span class="dot"></span>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leandro Toledano | Senior Backend Engineer</title>
+  <meta name="description" content="Leandro Toledano — Senior Backend Engineer. Java, Quarkus, Kafka, digital banking systems." />
+  
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts - Premium typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-deep: #0a0a0b;
+      --glass-surface: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --accent-primary: #2997ff;
+      --accent-glow: rgba(41, 151, 255, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-display);
+      background-color: #0a0a0b !important;
+      color: var(--text-primary);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.4;
+      pointer-events: none;
+      animation: floatOrb 20s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(41, 151, 255, 0.3) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(118, 75, 162, 0.25) 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      animation-delay: -10s;
+    }
+
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 60%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -30px) scale(1.05); }
+      50% { transform: translate(-20px, 20px) scale(0.98); }
+      75% { transform: translate(15px, 25px) scale(1.02); }
+    }
+
+    .glass-surface {
+      background: var(--glass-surface);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--glass-border);
+    }
+
+    .glass-card {
+      background: linear-gradient(
+        145deg,
+        rgba(28, 28, 30, 0.6) 0%,
+        rgba(20, 20, 22, 0.8) 100%
+      );
+      backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(41, 151, 255, 0.4);
+    }
+
+    .text-glow {
+      text-shadow: 
+        0 0 20px rgba(41, 151, 255, 0.3),
+        0 0 40px rgba(41, 151, 255, 0.15);
+    }
+
+    .text-gradient {
+      background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #a5b4fc 30%,
+        var(--accent-primary) 60%,
+        #c084fc 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .particle {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.3;
+      animation: particleFloat 15s ease-in-out infinite;
+    }
+
+    .particle:nth-child(odd) {
+      animation-delay: -5s;
+    }
+
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
+      25% { transform: translateY(-50px) translateX(30px); opacity: 0.6; }
+      50% { transform: translateY(-80px) translateX(-20px); opacity: 0.4; }
+      75% { transform: translateY(-30px) translateX(40px); opacity: 0.7; }
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal-up.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav-link-enter {
+      transform: translateX(-20px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .nav-link-enter.active {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .btn-glow-primary {
+      position: relative;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(41, 151, 255, 0.3);
+    }
+
+    .btn-glow-primary:hover {
+      transform: translateY(-2px);
+      border-color: white;
+      box-shadow: 0 8px 25px rgba(41, 151, 255, 0.2);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 48px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      transform: translateX(-24px);
+      box-shadow: 
+        0 0 0 4px rgba(41, 151, 255, 0.1),
+        0 0 30px rgba(41, 151, 255, 0.3);
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.1), 0 0 30px rgba(41, 151, 255, 0.2); }
+      50% { box-shadow: 0 0 0 6px rgba(41, 151, 255, 0.15), 0 0 50px rgba(41, 151, 255, 0.35); }
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(41, 151, 255, 0.3); }
+
+    .section-separator {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .section-separator::before,
+    .section-separator::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+  
+  <!-- Particles -->
+  <script>
+    const particleColors = ['#2997ff', '#c084fc', '#f472b6', '#a5b4fc'];
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
+      particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+      particle.style.animationDelay = (-Math.random() * 20) + 's';
+      particle.style.background = particleColors[Math.floor(Math.random() * particleColors.length)];
+      document.body.appendChild(particle);
+    }
+  </script>
+
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass-surface border-t-0">
+    <div class="container mx-auto px-6 max-w-7xl">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="text-xl font-semibold text-white flex items-center gap-3 group">
+          <span class="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 animate-pulse group-hover:scale-125 transition-transform"></span>
           LT / Backend
-        </div>
-        <nav class="nav-links">
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#stack">Stack</a>
-          <a href="#contact">Contact</a>
+        </a>
+        <nav class="hidden md:flex items-center gap-1">
+          <a href="#experience" class="nav-link-enter active px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-300">Experience</a>
+          <a href="#projects" class="nav-link-enter active px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-300 delay-100">Projects</a>
+          <a href="#stack" class="nav-link-enter active px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-300 delay-200">Stack</a>
+          <a href="#contact" class="nav-link-enter active px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-300 delay-300">Contact</a>
         </nav>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="container">
-      <section class="hero">
-        <div class="hero-badge">
-          <span>📍 Santo Domingo, DO</span>
-          <span>•</span>
-          <span>GMT-4</span>
-          <span>•</span>
-          <span style="color: var(--accent-primary)">Open to remote</span>
-        </div>
-        <h1>Backend rails for digital banking that <em>cannot go down.</em></h1>
-        <p>
-          Senior Backend Engineer building reactive, event-driven microservices
-          for digital banking — payment tokenization, change-data-capture
-          pipelines, and secure integrations, in Java and Quarkus.
-        </p>
-        <div class="hero-actions">
-          <a href="mailto:theleand3000@gmail.com" class="btn btn-primary">
-            <span>↗</span> Email me
-          </a>
-          <a
-            href="https://www.linkedin.com/in/leandro-toledano-4abb041bb"
-            target="_blank"
-            rel="noopener"
-            class="btn btn-secondary"
-          >
-            <span>in</span> LinkedIn
-          </a>
-          <a
-            href="https://github.com/Leand3k"
-            target="_blank"
-            rel="noopener"
-            class="btn btn-secondary"
-          >
-            <span>@</span> GitHub
-          </a>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-header">
-          <span class="section-num">01</span>
-          <h2 class="section-title">Summary</h2>
-        </div>
-        <p class="section-desc" style="margin-top: 8px">
-          Production metrics from current role — 57 microservices, 11M+ records
-          streamed
-        </p>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value">4+</div>
-            <div class="stat-label">Years in production backend</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">57</div>
-            <div class="stat-label">Microservices touched, current role</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">10M+</div>
-            <div class="stat-label">Transactions processed via GCS</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">3</div>
-            <div class="stat-label">Payment networks integrated</div>
-          </div>
-        </div>
-        <div
-          class="stat-card"
-          style="border-top: 4px solid var(--accent-primary)"
-        >
-          <div class="stat-value">0.15%</div>
-          <div class="stat-label">
-            Per-transaction fee automated to SAP billing
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="experience">
-        <div class="section-header">
-          <span class="section-num">02</span>
-          <h2 class="section-title">Experience</h2>
-        </div>
-        <!-- Timeline line eliminada -->
-        <div class="experience-list">
-          <div class="experience-item">
-            <div class="timeline-dot"></div>
-            <div class="experience-content">
-              <div class="experience-role">Senior Software Engineer</div>
-              <div class="experience-company">Banco Popular Dominicano</div>
-              <span class="experience-date">JUN 2024 — PRESENT</span>
-              <p class="experience-desc">
-                Built a digital debit card lifecycle microservice from scratch
-                (Java, Quarkus, OpenShift).<br />
-                Delivered Apple Pay, PayPal, and Click to Pay integrations —
-                tokenization, provisioning, and network compliance.<br />
-                Built the Click to Pay enrollment pipeline on Thales D1 with
-                JWE-encrypted PAN handling (ECDH-ES, RFC 7516) over
-                RSA-authenticated SFTP.<br />
-                Designed a Debezium/Kafka CDC pipeline on reactive
-                Quarkus/Mutiny feeding a denormalized Oracle store for near
-                real-time dashboards.<br />
-                Migrated blocking I/O to Hibernate Reactive + Mutiny with
-                Semaphore-based concurrency, validated with JMH benchmarks.<br />
-                Led the interbank payments ecosystem on Apache Camel — batch
-                orchestration, reconciliation, and the Java 21 / Jakarta / IBM
-                MQ–AS400 modernization.
-              </p>
-            </div>
-          </div>
-
-          <div class="experience-item">
-            <div
-              class="timeline-dot"
-              style="
-                background: var(--accent-cyan);
-                box-shadow: 0 0 15px rgba(47, 129, 247, 0.4);
-              "
-            ></div>
-            <div class="experience-content">
-              <div class="experience-role">Software Developer</div>
-              <div class="experience-company">Grupo Ramos</div>
-              <span class="experience-date">SEP 2022 — JUN 2024</span>
-              <p class="experience-desc">
-                Led the backend migration of the core backoffice system from a
-                legacy PHP monolith to Node.js/Express.js with Sequelize.<br />
-                Maintained a retail personalization engine (Evergage) powering
-                data-driven product recommendations.
-              </p>
-            </div>
-          </div>
-
-          <div class="experience-item">
-            <div
-              class="timeline-dot"
-              style="
-                background: var(--accent-blue);
-                box-shadow: 0 0 15px rgba(9, 105, 218, 0.4);
-              "
-            ></div>
-            <div class="experience-content">
-              <div class="experience-role">Junior Software Engineer</div>
-              <div class="experience-company">Progressa Corporate Group</div>
-              <span class="experience-date">FEB 2022 — JUN 2022</span>
-              <p class="experience-desc">
-                Built GCP-backed Python services for electronic invoicing via
-                DGII e-CF.<br />
-                Developed custom Odoo modules to automate business processes.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="projects">
-        <div class="section-header">
-          <span class="section-num">03</span>
-          <h2 class="section-title">Featured projects</h2>
-        </div>
-        <p
-          class="section-desc"
-          style="max-width: 640px; color: var(--text-muted)"
-        >
-          Four projects implemented — tracing system flow and architecture
-          patterns.
-        </p>
-
-        <div class="projects-grid">
-          <div class="project-card">
-            <div class="project-badge">🎯 Built from scratch</div>
-            <div class="project-title">Digital debit card lifecycle</div>
-            <p class="project-desc">
-              A microservice covering card creation, provisioning, and state
-              management for the bank's mobile platform, built on Java, Quarkus,
-              and OpenShift.
-            </p>
-            <div class="project-flow">
-              <span class="flow-step">Card request</span>
-              <span>→</span>
-              <span class="flow-step">Provisioning</span>
-              <span>→</span>
-              <span class="flow-step">Activation</span>
-              <span>→</span>
-              <span class="flow-step">Lifecycle state</span>
-            </div>
-          </div>
-
-          <div class="project-card">
-            <div class="project-badge">🔐 3 networks secured</div>
-            <div class="project-title">Click to Pay enrollment — Thales D1</div>
-            <p class="project-desc">
-              PAN handling and network enrollment via Thales D1: JWE encryption
-              (ECDH-ES, RFC 7516) for compliance with payment networks, batch
-              CSV/JSON processing, and RSA-authenticated SFTP transfer.
-            </p>
-            <div class="project-flow">
-              <span class="flow-step">PAN input</span>
-              <span>→</span>
-              <span class="flow-step">JWE encryption</span>
-              <span>→</span>
-              <span class="flow-step">RSA-auth SFTP</span>
-              <span>→</span>
-              <span class="flow-step">Network enrollment</span>
-            </div>
-          </div>
-
-          <div class="project-card">
-            <div class="project-badge">🔄 CDC streaming pipeline</div>
-            <div class="project-title">
-              CDC streaming pipeline with Quarkus/Mutiny
-            </div>
-            <p class="project-desc">
-              Implemented a Debezium/Kafka CDC pipeline on reactive
-              Quarkus/Mutiny to stream database changes for near real-time data
-              synchronization and dashboards.
-            </p>
-            <div style="position: relative; margin-top: 14px">
-              <span class="flow-step">Core Banking DB</span>
-              <span>→</span>
-              <span class="flow-step">Debezium CDC</span>
-              <span>→</span>
-              <span class="flow-step">Kafka stream</span>
-              <span>→</span>
-              <span class="flow-step">Quarkus Mutiny</span>
-              <span>→</span>
-              <span class="flow-step">Oracle denorm.</span>
-            </div>
-          </div>
-
-          <div class="project-card">
-            <div class="project-badge">💰 0.15% / txn automated</div>
-            <div class="project-title">Interbank payments — SAP billing</div>
-            <p class="project-desc">
-              Part of the interbank payments ecosystem orchestrated on Apache
-              Camel: each ACH transaction is reconciled and a 0.15% fee is
-              calculated and automatically billed to SAP.
-            </p>
-            <div class="project-flow">
-              <span class="flow-step">ACH transaction</span>
-              <span>→</span>
-              <span class="flow-step">Camel orchestration</span>
-              <span>→</span>
-              <span class="flow-step">0.15% fee calc</span>
-              <span>→</span>
-              <span class="flow-step">SAP billing feed</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section stack-section" id="stack">
-        <div class="section-header">
-          <span class="section-num">04</span>
-          <h2 class="section-title">Stack, by category</h2>
-        </div>
-        <p class="section-desc">
-          34 technologies in active use — real count per category.
-        </p>
-
-        <div class="stack-grid">
-          <div class="stack-category">
-            <div class="stack-header">
-              <span class="stack-title">Payments, security & architecture</span>
-              <span class="tech-badge">
-                <span class="tech-item">Payment Tokenization</span>
-                <span class="tech-item">Thales D1 / JWE</span>
-                <span class="tech-item">RSA Auth Manager</span>
-                <span class="tech-item">BeyondTrust PAM</span>
-                <span class="tech-item">mTLS</span>
-                <span class="tech-item">Microservices</span>
-                <span class="tech-item">REST API Design</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="stack-category">
-            <div class="stack-header">
-              <span class="stack-title">Frameworks & reactive</span>
-              <span class="tech-badge">
-                <span class="tech-item">Quarkus</span>
-                <span class="tech-item">Spring Boot</span>
-                <span class="tech-item">Node.js/Express.js</span>
-                <span class="tech-item">Hibernate Reactive</span>
-                <span class="tech-item">Mutiny</span>
-                <span class="tech-item">JMH</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="stack-category">
-            <div class="stack-header">
-              <span class="stack-title">Cloud & DevOps</span>
-              <span class="tech-badge">
-                <span class="tech-item">GCP</span>
-                <span class="tech-item">OpenShift</span>
-                <span class="tech-item">Kubernetes</span>
-                <span class="tech-item">Docker</span>
-                <span class="tech-item">CI/CD</span>
-                <span class="tech-item">Git</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="stack-category">
-            <div class="stack-header">
-              <span class="stack-title">Messaging & integration</span>
-              <span class="tech-badge">
-                <span class="tech-item">Apache Kafka</span>
-                <span class="tech-item">Debezium (CDC)</span>
-                <span class="tech-item">IBM MQ</span>
-                <span class="tech-item">Apache Camel</span>
-                <span class="tech-item">JMS</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="stack-category">
-            <div class="stack-header">
-              <span class="stack-title">Databases</span>
-              <span class="tech-badge">
-                <span class="tech-item">PostgreSQL</span>
-                <span class="tech-item">Oracle</span>
-                <span class="tech-item">SQL Server</span>
-                <span class="tech-item">MongoDB</span>
-                <span class="tech-item">MariaDB</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="stack-category">
-            <div class="stack-header">
-              <span class="stack-title">Languages</span>
-              <span class="tech-badge">
-                <span class="tech-item">Java</span>
-                <span class="tech-item">Python</span>
-                <span class="tech-item">JavaScript</span>
-                <span class="tech-item">SQL</span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer id="contact">
-      <div class="container">
-        <h2 class="footer-title">Let's talk backend.</h2>
-        <p class="footer-desc">
-          Open to remote Senior Backend Engineer roles on distributed,
-          event-driven systems teams. Based in Santo Domingo (GMT-4).
-        </p>
-
-        <div class="footer-links">
-          <a href="mailto:theleand3000@gmail.com" class="footer-link"
-            >theleand3000@gmail.com</a
-          >
-          <a
-            href="https://www.linkedin.com/in/leandro-toledano-4abb041bb"
-            target="_blank"
-            rel="noopener"
-            class="footer-link"
-            >linkedin.com/in/leandro-toledano</a
-          >
-          <a
-            href="https://github.com/Leand3k"
-            target="_blank"
-            rel="noopener"
-            class="footer-link"
-            >github.com/Leand3k</a
-          >
-        </div>
-
-        <div class="seal">
-          <div class="seal-text">
-            INTEC<br />
-            2018–2022<br />
-            GPA 3.6/4.0 · GCP Cert
-          </div>
-        </div>
-
-        <p class="copyright">© 2026 Leandro Toledano</p>
+  <!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+    <div class="container mx-auto px-6 max-w-5xl text-center z-10">
+      <div class="reveal-up active mb-8 inline-flex items-center gap-3 glass-surface rounded-full px-4 py-2 text-xs font-mono">
+        <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-500/20 animate-pulse"></span>
+        📍 Santo Domingo, DO
+        <span class="w-1 h-1 rounded-full bg-white/30"></span>
+        GMT-4
+        <span class="w-1 h-1 rounded-full bg-white/30"></span>
+        <span class="text-blue-400">Open to remote</span>
       </div>
-    </footer>
 
-    <script>
-      // Smooth reveal on scroll
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.style.opacity = "1";
-              entry.target.style.transform = "translateY(0)";
-            }
-          });
-        },
-        { threshold: 0.1 },
-      );
+      <h1 class="reveal-up active mb-6 text-5xl md:text-7xl font-bold leading-tight">
+        Backend rails for digital banking that
+        <span class="text-glow ml-3 text-gradient">cannot go down.</span>
+      </h1>
 
-      document
-        .querySelectorAll(".stat-card, .project-card, .stack-category")
-        .forEach((el) => {
-          el.style.opacity = "0";
-          el.style.transform = "translateY(30px)";
-          el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-          observer.observe(el);
+      <p class="reveal-up active mb-10 max-w-2xl mx-auto text-lg md:text-xl text-gray-400 leading-relaxed">
+        Senior Backend Engineer building reactive, event-driven microservices 
+        for digital banking — payment tokenization, change-data-capture pipelines, 
+        and secure integrations, in Java and Quarkus.
+      </p>
+
+      <div class="reveal-up active flex flex-wrap justify-center gap-4">
+        <a href="mailto:theleand3000@gmail.com" class="btn-glow-primary bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium px-8 py-3 rounded-full text-sm hover:border-white/30">
+          Email me
+        </a>
+        <a href="https://www.linkedin.com/in/leandro-toledano-4abb041bb" target="_blank" rel="noopener" class="glass-card px-8 py-3 rounded-full text-sm font-medium hover:border-white/30 flex items-center gap-2">
+          <i class="fab fa-linkedin mr-2 text-blue-400"></i> LinkedIn
+        </a>
+        <a href="https://github.com/Leand3k" target="_blank" rel="noopener" class="glass-card px-8 py-3 rounded-full text-sm font-medium hover:border-white/30 flex items-center gap-2">
+          @ GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary Section -->
+  <section class="py-24 bg-gradient-to-b from-transparent to-black/50">
+    <div class="container mx-auto px-6 max-w-5xl">
+      <div class="section-separator mb-8">
+        <span>01</span>
+        <span>Summary</span>
+      </div>
+
+      <p class="reveal-up max-w-3xl text-xl text-gray-400 leading-relaxed mb-12">
+        Production metrics from current role — 57 microservices, 11M+ records streamed
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="reveal-up delay-0 glass-card stat-card p-6 rounded-2xl">
+          <div class="text-3xl font-bold text-blue-400 mb-2">4+</div>
+          <div class="text-xs uppercase tracking-wider text-gray-400">Years in production backend</div>
+        </div>
+        
+        <div class="reveal-up delay-100 glass-card stat-card p-6 rounded-2xl">
+          <div class="text-3xl font-bold text-blue-400 mb-2">57</div>
+          <div class="text-xs uppercase tracking-wider text-gray-400">Microservices touched, current role</div>
+        </div>
+        
+        <div class="reveal-up delay-200 glass-card stat-card p-6 rounded-2xl">
+          <div class="text-3xl font-bold text-purple-400 mb-2">10M+</div>
+          <div class="text-xs uppercase tracking-wider text-gray-400">Transactions processed via GCS</div>
+        </div>
+        
+        <div class="reveal-up delay-300 glass-card stat-card p-6 rounded-2xl">
+          <div class="text-3xl font-bold text-purple-400 mb-2">3</div>
+          <div class="text-xs uppercase tracking-wider text-gray-400">Payment networks integrated</div>
+        </div>
+      </div>
+
+      <div class="reveal-up delay-500 glass-card border-t-4 border-blue-500 mt-6 p-6 rounded-2xl">
+        <div class="text-3xl font-bold text-blue-400 mb-1">0.15%</div>
+        <div class="text-sm uppercase tracking-wider text-gray-400">Per-transaction fee automated to SAP billing</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-24 relative">
+    <div class="container mx-auto px-6 max-w-5xl">
+      <div class="section-separator mb-12">
+        <span>02</span>
+        <span>Experience</span>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Experience Item 1 -->
+        <div class="reveal-up delay-0 timeline-item">
+          <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+            <h3 class="text-xl font-semibold text-white">Senior Software Engineer</h3>
+            <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-xs text-blue-400 font-mono">Banco Popular Dominicano</span>
+          </div>
+          <div class="flex flex-col md:flex-row items-center gap-3 mb-3">
+            <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-xs text-purple-400 font-mono">JUN 2024 — PRESENT</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Built a digital debit card lifecycle microservice from scratch (Java, Quarkus, OpenShift). 
+            Delivered Apple Pay, PayPal, and Click to Pay integrations — tokenization, provisioning, and network compliance. 
+            Built the Click to Pay enrollment pipeline on Thales D1 with JWE-encrypted PAN handling (ECDH-ES, RFC 7516) over RSA-authenticated SFTP. 
+            Designed a Debezium/Kafka CDC pipeline on reactive Quarkus/Mutiny feeding a denormalized Oracle store for near real-time dashboards. 
+            Migrated blocking I/O to Hibernate Reactive + Mutiny with Semaphore-based concurrency, validated with JMH benchmarks. 
+            Led the interbank payments ecosystem on Apache Camel — batch orchestration, reconciliation, and the Java 21 / Jakarta / IBM MQ–AS400 modernization.
+          </p>
+        </div>
+
+        <!-- Experience Item 2 -->
+        <div class="reveal-up delay-100 timeline-item">
+          <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+            <h3 class="text-xl font-semibold text-white">Software Developer</h3>
+            <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-xs text-blue-400 font-mono">Grupo Ramos</span>
+          </div>
+          <div class="flex flex-col md:flex-row items-center gap-3 mb-3">
+            <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-xs text-purple-400 font-mono">SEP 2022 — JUN 2024</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Led the backend migration of the core backoffice system from a legacy PHP monolith to Node.js/Express.js with Sequelize. 
+            Maintained a retail personalization engine (Evergage) powering data-driven product recommendations.
+          </p>
+        </div>
+
+        <!-- Experience Item 3 -->
+        <div class="reveal-up delay-200 timeline-item">
+          <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+            <h3 class="text-xl font-semibold text-white">Junior Software Engineer</h3>
+            <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-xs text-blue-400 font-mono">Progressa Corporate Group</span>
+          </div>
+          <div class="flex flex-col md:flex-row items-center gap-3 mb-3">
+            <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-xs text-purple-400 font-mono">FEB 2022 — JUN 2022</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Built GCP-backed Python services for electronic invoicing via DGII e-CF. 
+            Developed custom Odoo modules to automate business processes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="py-24 bg-gradient-to-b from-transparent to-black/50">
+    <div class="container mx-auto px-6 max-w-5xl">
+      <div class="section-separator mb-12">
+        <span>03</span>
+        <span>Featured projects</span>
+      </div>
+
+      <p class="reveal-up mb-12 max-w-3xl text-gray-400 leading-relaxed">
+        Four projects implemented — tracing system flow and architecture patterns.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Project 1 -->
+        <div class="reveal-up delay-0 glass-card project-card p-8 rounded-2xl cursor-pointer group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-white font-mono">🎯 Built from scratch</span>
+            <i class="fas fa-chevron-right icon-animate text-gray-500 group-hover:text-blue-400 transition-colors"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Digital debit card lifecycle</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">A microservice covering card creation, provisioning, and state management for the bank's mobile platform, built on Java, Quarkus, and OpenShift.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Card request</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Provisioning</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Activation</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Lifecycle state</span>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="reveal-up delay-100 glass-card project-card p-8 rounded-2xl cursor-pointer group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-white font-mono">🔐 3 networks secured</span>
+            <i class="fas fa-chevron-right icon-animate text-gray-500 group-hover:text-blue-400 transition-colors"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Click to Pay enrollment — Thales D1</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">PAN handling and network enrollment via Thales D1: JWE encryption (ECDH-ES, RFC 7516) for compliance with payment networks, batch CSV/JSON processing, and RSA-authenticated SFTP transfer.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">PAN input</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">JWE encryption</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">RSA-auth SFTP</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Network enrollment</span>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="reveal-up delay-200 glass-card project-card p-8 rounded-2xl cursor-pointer group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-white font-mono">🔄 CDC streaming pipeline</span>
+            <i class="fas fa-chevron-right icon-animate text-gray-500 group-hover:text-blue-400 transition-colors"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">CDC streaming pipeline with Quarkus/Mutiny</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Implemented a Debezium/Kafka CDC pipeline on reactive Quarkus/Mutiny to stream database changes for near real-time data synchronization and dashboards.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Core Banking DB</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Debezium CDC</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Kafka stream</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Quarkus Mutiny</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Oracle denorm.</span>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="reveal-up delay-300 glass-card project-card p-8 rounded-2xl cursor-pointer group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-white font-mono">💰 0.15% / txn automated</span>
+            <i class="fas fa-chevron-right icon-animate text-gray-500 group-hover:text-blue-400 transition-colors"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Interbank payments — SAP billing</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Part of the interbank payments ecosystem orchestrated on Apache Camel: each ACH transaction is reconciled and a 0.15% fee is calculated and automatically billed to SAP.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">ACH transaction</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">Camel orchestration</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">0.15% fee calc</span>
+            <span class="text-gray-600">→</span>
+            <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs font-mono">SAP billing feed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack Section -->
+  <section id="stack" class="py-24 relative">
+    <div class="container mx-auto px-6 max-w-5xl">
+      <div class="section-separator mb-12">
+        <span>04</span>
+        <span>Stack, by category</span>
+      </div>
+
+      <p class="reveal-up mb-12 text-gray-400">34 technologies in active use — real count per category.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Category 1 -->
+        <div class="reveal-up delay-0 glass-card stack-category p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold mb-4 text-white">Payments, security & architecture</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Payment Tokenization</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Thales D1 / JWE</span>
+            <span class="stack-tag bg-pink-500/10 border border-pink-500/20 hover:border-pink-400 cursor-pointer transition-all">RSA Auth Manager</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">BeyondTrust PAM</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">mTLS</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Microservices</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">REST API Design</span>
+          </div>
+        </div>
+
+        <!-- Category 2 -->
+        <div class="reveal-up delay-100 glass-card stack-category p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold mb-4 text-white">Frameworks & reactive</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Quarkus</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Spring Boot</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">Node.js/Express.js</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Hibernate Reactive</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Mutiny</span>
+            <span class="stack-tag bg-pink-500/10 border border-pink-500/20 hover:border-pink-400 cursor-pointer transition-all">JMH</span>
+          </div>
+        </div>
+
+        <!-- Category 3 -->
+        <div class="reveal-up delay-200 glass-card stack-category p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold mb-4 text-white">Cloud & DevOps</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">GCP</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">OpenShift</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">Kubernetes</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Docker</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">CI/CD</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">Git</span>
+          </div>
+        </div>
+
+        <!-- Category 4 -->
+        <div class="reveal-up delay-300 glass-card stack-category p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold mb-4 text-white">Messaging & integration</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Apache Kafka</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Debezium (CDC)</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">IBM MQ</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Apache Camel</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">JMS</span>
+          </div>
+        </div>
+
+        <!-- Category 5 -->
+        <div class="reveal-up delay-500 glass-card stack-category p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold mb-4 text-white">Databases</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">PostgreSQL</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Oracle</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">SQL Server</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">MongoDB</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">MariaDB</span>
+          </div>
+        </div>
+
+        <!-- Category 6 -->
+        <div class="reveal-up delay-600 glass-card stack-category p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold mb-4 text-white">Languages</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">Java</span>
+            <span class="stack-tag bg-purple-500/10 border border-purple-500/20 hover:border-purple-400 cursor-pointer transition-all">Python</span>
+            <span class="stack-tag bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-400 cursor-pointer transition-all">JavaScript</span>
+            <span class="stack-tag bg-blue-500/10 border border-blue-500/20 hover:border-blue-400 cursor-pointer transition-all">SQL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="py-24 bg-gradient-to-t from-black to-transparent text-center relative overflow-hidden">
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+      <h2 class="reveal-up text-4xl md:text-5xl font-bold mb-6">Let's talk backend.</h2>
+      
+      <p class="reveal-up delay-100 max-w-xl mx-auto text-gray-400 leading-relaxed mb-12">
+        Open to remote Senior Backend Engineer roles on distributed, 
+        event-driven systems teams. Based in Santo Domingo (GMT-4).
+      </p>
+
+      <div class="reveal-up delay-200 flex justify-center gap-4 flex-wrap mb-16">
+        <a href="mailto:theleand3000@gmail.com" class="btn-glow-primary bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium px-8 py-3 rounded-full text-sm hover:border-white/30">
+          theleand3000@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/leandro-toledano-4abb041bb" target="_blank" rel="noopener" class="glass-card px-8 py-3 rounded-full text-sm font-medium hover:border-white/30 flex items-center gap-2">
+          <i class="fab fa-linkedin mr-2 text-blue-400"></i> linkedin.com/in/leandro-toledano
+        </a>
+        <a href="https://github.com/Leand3k" target="_blank" rel="noopener" class="glass-card px-8 py-3 rounded-full text-sm font-medium hover:border-white/30 flex items-center gap-2">
+          github.com/Leand3k
+        </a>
+      </div>
+
+      <!-- Glass Seal -->
+      <div class="reveal-up delay-300 seal-glass border-4 border-blue-500/50 rounded-full p-8 transform rotate-[-6deg] mb-16 mx-auto max-w-[280px]">
+        <div class="seal-inner text-center">
+          <div class="text-sm font-mono text-white leading-tight">INTEC<br />2018–2022</div>
+          <div class="text-xs font-mono text-blue-400 mt-2">GPA 3.6/4.0 · GCP Cert</div>
+        </div>
+      </div>
+
+      <p class="reveal-up delay-500 text-sm font-mono text-gray-600">© 2026 Leandro Toledano</p>
+    </div>
+  </footer>
+
+<script>
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal-up').forEach(el => {
+    observer.observe(el);
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll('.nav-link-enter').forEach((el, i) => {
+      setTimeout(() => {
+        el.classList.add('active');
+      }, 200 * i);
+    });
+  }, 100);
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
         });
-    </script>
-  </body>
+      }
+    });
+  });
+</script>
+
+</body>
 </html>
